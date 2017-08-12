@@ -1,0 +1,22 @@
+{
+    "name": "dpc/guzzle-client",
+    "description": "Simple Guzzle Client for a Laravel application",
+    "type": "libr",
+    "license": "MIT",
+    "require": {
+        "guzzlehttp/guzzle": "^6.3",
+        "illuminate/support": "^5.4"
+    },
+    "prefer-stable": true,
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "Dpc\\GuzzleClient\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Dpc\\GuzzleClient\\Tests\\": "tests"
+        }
+    },
+}
