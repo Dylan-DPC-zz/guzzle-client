@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 use ThemeAnorak\LaravelShopify\Services\GuzzleClient;
 
-class GuzzleClientProvider extends ServiceProvider
+class GuzzleClientServiceProvider extends ServiceProvider
 {
     public function boot()
     {
