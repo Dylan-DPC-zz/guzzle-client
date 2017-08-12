@@ -18,5 +18,5 @@
         "psr-4": {
             "Dpc\\GuzzleClient\\Tests\\": "tests"
         }
-    },
+    }
 }
