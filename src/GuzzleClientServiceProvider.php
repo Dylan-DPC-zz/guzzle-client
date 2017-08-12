@@ -4,7 +4,7 @@ namespace Dpc\GuzzleClient;
 
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
-use ThemeAnorak\LaravelShopify\Services\GuzzleClient;
+use Dpc\GuzzleClient\Services\GuzzleClient;
 
 class GuzzleClientServiceProvider extends ServiceProvider
 {
