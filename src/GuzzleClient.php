@@ -1,6 +1,6 @@
 <?php
 
-namespace Dpc\GuzzleClient\Services;
+namespace Dpc\GuzzleClient;
 
 use GuzzleHttp\Client;
 use Dpc\GuzzleClient\RequestClientContract;

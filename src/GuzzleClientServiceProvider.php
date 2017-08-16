@@ -4,7 +4,6 @@ namespace Dpc\GuzzleClient;
 
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
-use Dpc\GuzzleClient\Services\GuzzleClient;
 
 class GuzzleClientServiceProvider extends ServiceProvider
 {
