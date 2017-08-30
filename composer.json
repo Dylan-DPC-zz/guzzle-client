@@ -5,7 +5,7 @@
     "license": "MIT",
     "require": {
         "guzzlehttp/guzzle": "^6.3",
-        "illuminate/support": "5.4.*"
+        "illuminate/support": "5.4.*||5.5.*"
     },
     "prefer-stable": true,
     "minimum-stability": "stable",
@@ -18,5 +18,11 @@
         "psr-4": {
             "Dpc\\GuzzleClient\\Tests\\": "tests"
         }
-    }
-}
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Dpc\\GuzzleClient\\GuzzleClientServiceProvider"
+            ]
+
+        }
