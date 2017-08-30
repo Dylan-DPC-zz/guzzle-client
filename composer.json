@@ -24,5 +24,6 @@
             "providers": [
                 "Dpc\\GuzzleClient\\GuzzleClientServiceProvider"
             ]
-
         }
+    }
+}
