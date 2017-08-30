@@ -19,11 +19,11 @@ class GuzzleClient implements RequestClientContract
 
     public function send(string $method, string $uri, array $body = null, array $headers = null, array $options = null)
     {
-        return $this->client->request($method, $uri, [
+        return json_decode($this->client->request($method, $uri, [
             'form_params' => $body,
             'headers' => $headers,
             'options' => $options,
-        ])->getBody();
+        ])->getBody());
 
     }
 
