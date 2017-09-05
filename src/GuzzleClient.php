@@ -9,6 +9,8 @@ class GuzzleClient implements RequestClientContract
 {
     protected $client;
 
+    protected $response;
+
     /**
      * GuzzleClient constructor.
      */
@@ -19,12 +21,26 @@ class GuzzleClient implements RequestClientContract
 
     public function send(string $method, string $uri, array $body = null, array $headers = null, array $options = null)
     {
-        return json_decode($this->client->request($method, $uri, [
+        $this->response = $this->client->request($method, $uri, [
             'form_params' => $body,
             'headers' => $headers,
             'options' => $options,
-        ])->getBody());
-
+        ])->getBody();
+        
+        return $this;
     }
+
+    public function content() : string
+    {
+        return $this->response;
+    }
+
+    public function json()
+    {
+        return json_decode($this->response);
+        
+    }
+    
+    
 
 }
