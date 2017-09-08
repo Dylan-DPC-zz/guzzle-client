@@ -11,7 +11,7 @@ class GuzzleClientServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/../config.php' => config_path('guzzle.php'),
-        ], 'config');
+        ], 'guzzle-client-config');
 
     }
 
