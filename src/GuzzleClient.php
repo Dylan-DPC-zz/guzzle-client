@@ -70,7 +70,4 @@ class GuzzleClient implements RequestClientContract
             'options' => $this->options,
         ])->getBody();
     }
-    
-    
-
 }
