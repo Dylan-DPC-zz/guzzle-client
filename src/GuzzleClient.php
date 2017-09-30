@@ -11,6 +11,19 @@ class GuzzleClient implements RequestClientContract
 
     protected $response;
 
+    protected $method;
+
+    protected $uri;
+
+    protected $body;
+
+    protected $headers;
+
+    protected $options;
+
+    protected $format;
+
+
     /**
      * GuzzleClient constructor.
      */
@@ -21,24 +34,41 @@ class GuzzleClient implements RequestClientContract
 
     public function send(string $method, string $uri, array $body = null, array $headers = null, array $options = null)
     {
-        $this->response = $this->client->request($method, $uri, [
-            'form_params' => $body,
-            'headers' => $headers,
-            'options' => $options,
-        ])->getBody();
-        
+        [ $this->method, $this->uri, $this->body, $this->headers, $this->options ] = [$method, $uri, $body, $headers, $options];
+
         return $this;
+    }
+
+    public function asFormParams()
+    {
+        $this->format = 'form_params';
+        return $this;
+    }
+
+    public function asJson()
+    {
+        $this->format = 'json';
+        return $this;
+
     }
 
     public function content() : string
     {
-        return $this->response;
+        return $this->sendRequest();
     }
 
     public function json()
     {
-        return json_decode($this->response);
-        
+        return json_decode($this->sendRequest());
+    }
+
+    protected function sendRequest()
+    {
+        return $this->client->request($this->method, $this->uri, [
+            $this->format  => $this->body,
+            'headers' => $this->headers,
+            'options' => $this->options,
+        ])->getBody();
     }
     
     
