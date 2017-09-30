@@ -10,4 +10,8 @@ interface RequestClientContract
     public function json();
 
     public function content();
+
+    public function asFormParams();
+
+    public function asJson();
 }
