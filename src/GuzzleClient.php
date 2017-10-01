@@ -1,5 +1,4 @@
 <?php
-
 namespace Dpc\GuzzleClient;
 
 use GuzzleHttp\Client;
@@ -8,21 +7,13 @@ use Dpc\GuzzleClient\RequestClientContract;
 class GuzzleClient implements RequestClientContract
 {
     protected $client;
-
     protected $response;
-
     protected $method;
-
     protected $uri;
-
     protected $body;
-
     protected $headers;
-
     protected $options;
-
     protected $format;
-
 
     /**
      * GuzzleClient constructor.
@@ -43,7 +34,13 @@ class GuzzleClient implements RequestClientContract
      */
     public function send(string $method, string $uri, array $body = null, array $headers = null, array $options = null)
     {
-        [ $this->method, $this->uri, $this->body, $this->headers, $this->options ] = [$method, $uri, $body, $headers, $options];
+        [$this->method, $this->uri, $this->body, $this->headers, $this->options] = [
+            $method,
+            $uri,
+            $body,
+            $headers,
+            $options
+        ];
 
         return $this;
     }
@@ -64,7 +61,6 @@ class GuzzleClient implements RequestClientContract
     {
         $this->format = 'json';
         return $this;
-
     }
 
     /**
@@ -89,6 +85,7 @@ class GuzzleClient implements RequestClientContract
             $this->format  => $this->body,
             'headers' => $this->headers,
             'options' => $this->options,
-        ])->getBody();
+        ])
+        ->getBody();
     }
 }
