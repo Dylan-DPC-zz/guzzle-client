@@ -32,6 +32,15 @@ class GuzzleClient implements RequestClientContract
         $this->client = app(Client::class);
     }
 
+    /**
+     * @param string $method
+     * @param string $uri
+     * @param array  $body    (optional)
+     * @param array  $headers (optional)
+     * @param array  $options (optional)
+     *
+     * @return Dpc\GuzzleClient\GuzzleClient
+     */
     public function send(string $method, string $uri, array $body = null, array $headers = null, array $options = null)
     {
         [ $this->method, $this->uri, $this->body, $this->headers, $this->options ] = [$method, $uri, $body, $headers, $options];
@@ -39,12 +48,18 @@ class GuzzleClient implements RequestClientContract
         return $this;
     }
 
+    /**
+     * @return Dpc\GuzzleClient\GuzzleClient
+     */
     public function asFormParams()
     {
         $this->format = 'form_params';
         return $this;
     }
 
+    /**
+     * @return Dpc\GuzzleClient\GuzzleClient
+     */
     public function asJson()
     {
         $this->format = 'json';
@@ -52,6 +67,9 @@ class GuzzleClient implements RequestClientContract
 
     }
 
+    /**
+     * @return string
+     */
     public function content() : string
     {
         return $this->sendRequest();
@@ -62,6 +80,9 @@ class GuzzleClient implements RequestClientContract
         return json_decode($this->sendRequest());
     }
 
+    /**
+     * @return GuzzleHttp\Psr7\Stream
+     */
     protected function sendRequest()
     {
         return $this->client->request($this->method, $this->uri, [
