@@ -1,9 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace Dpc\GuzzleClient;
 
 use GuzzleHttp\Client;
-use Dpc\GuzzleClient\RequestClientContract;
 
 class GuzzleClient implements RequestClientContract
 {
@@ -23,7 +23,6 @@ class GuzzleClient implements RequestClientContract
 
     protected $format;
 
-
     /**
      * GuzzleClient constructor.
      */
@@ -33,51 +32,60 @@ class GuzzleClient implements RequestClientContract
     }
 
     /**
-     * @param string $method
-     * @param string $uri
+     * @param string $method  Method to use
+     * @param string $uri     Request uri
      * @param array  $body    (optional)
      * @param array  $headers (optional)
      * @param array  $options (optional)
      *
-     * @return Dpc\GuzzleClient\GuzzleClient
+     * @return GuzzleClient
      */
-    public function send(string $method, string $uri, array $body = null, array $headers = null, array $options = null)
-    {
+    public function send(
+        string $method,
+        string $uri,
+        array $body = null,
+        array $headers = null,
+        array $options = null
+    ): GuzzleClient {
         [ $this->method, $this->uri, $this->body, $this->headers, $this->options ] = [$method, $uri, $body, $headers, $options];
 
         return $this;
     }
 
     /**
-     * @return Dpc\GuzzleClient\GuzzleClient
+     * @return GuzzleClient
      */
-    public function asFormParams()
+    public function asFormParams(): GuzzleClient
     {
         $this->format = 'form_params';
+
         return $this;
     }
 
     /**
-     * @return Dpc\GuzzleClient\GuzzleClient
+     * @return GuzzleClient
      */
-    public function asJson(): self
+    public function asJson(): GuzzleClient
     {
         $this->format = 'json';
-        return $this;
 
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function content()
+    public function content(): string
     {
         return $this->sendRequest();
     }
 
+    /**
+     * @return array|\stdClass
+     */
     public function json()
     {
-        return json_decode($this->sendRequest());
+        return \json_decode($this->sendRequest());
     }
 
     /**
