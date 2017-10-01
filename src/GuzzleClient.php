@@ -60,7 +60,7 @@ class GuzzleClient implements RequestClientContract
     /**
      * @return Dpc\GuzzleClient\GuzzleClient
      */
-    public function asJson()
+    public function asJson(): self
     {
         $this->format = 'json';
         return $this;
@@ -70,7 +70,7 @@ class GuzzleClient implements RequestClientContract
     /**
      * @return string
      */
-    public function content() : string
+    public function content()
     {
         return $this->sendRequest();
     }
@@ -81,11 +81,11 @@ class GuzzleClient implements RequestClientContract
     }
 
     /**
-     * @return GuzzleHttp\Psr7\Stream
+     * @return string
      */
-    protected function sendRequest()
+    protected function sendRequest(): string
     {
-        return $this->client->request($this->method, $this->uri, [
+        return (string) $this->client->request($this->method, $this->uri, [
             $this->format  => $this->body,
             'headers' => $this->headers,
             'options' => $this->options,
