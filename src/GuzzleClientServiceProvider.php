@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Dpc\GuzzleClient;
 
@@ -12,7 +13,6 @@ class GuzzleClientServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config.php' => config_path('guzzle.php'),
         ], 'guzzle-client-config');
-
     }
 
     /**
@@ -20,7 +20,7 @@ class GuzzleClientServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->bind(RequestClientContract::class, GuzzleClient::class);
         $this->app->bind(Client::class, function () {
@@ -28,6 +28,5 @@ class GuzzleClientServiceProvider extends ServiceProvider
                 'base_uri' => config('guzzle.base_uri'),
             ]);
         });
-
     }
 }
