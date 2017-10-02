@@ -49,7 +49,7 @@ You can then use the client by:
 The `asJson()` method will send the data using `json` key in the Guzzle request. (You can use `asFormParams()` to send the request as form params). 
 
 # Versioning
-This package follows [semver](http://semver.org/). The new features introduced & any breaking changes created in major releases will be mentioned in [releases](https://github.com/Dylan-DPC/guzzle-client/releases). 
+This package follows [semver](http://semver.org/). Features introduced & any breaking changes created in major releases are mentioned in [releases](https://github.com/Dylan-DPC/guzzle-client/releases). 
 
 # Support
 This package is created as a basic wrapper for Guzzle based on what I needed in a few projects. If you need any other features of Guzzle, you can create a issue  here or send a PR to master branch. 
