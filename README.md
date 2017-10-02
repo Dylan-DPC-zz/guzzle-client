@@ -8,6 +8,12 @@ A Simple Guzzle Client for a Laravel application
 * [Laravel](https://laravel.com/)
 * [Composer](https://getcomposer.org/)
 
+# Installation
+Via composer
+```bash
+$ composer require dpc/guzzle-client
+```
+
 # Authors
 [Dylan DPC](https://github.com/Dylan-DPC)
 
