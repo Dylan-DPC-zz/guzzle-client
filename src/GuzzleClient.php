@@ -3,7 +3,6 @@
 namespace Dpc\GuzzleClient;
 
 use GuzzleHttp\Client;
-use Dpc\GuzzleClient\RequestClientContract;
 
 class GuzzleClient implements RequestClientContract
 {
@@ -23,7 +22,6 @@ class GuzzleClient implements RequestClientContract
 
     protected $format;
 
-
     /**
      * GuzzleClient constructor.
      */
@@ -35,32 +33,32 @@ class GuzzleClient implements RequestClientContract
     /**
      * @param string $method
      * @param string $uri
-     * @param array  $body    (optional)
-     * @param array  $headers (optional)
-     * @param array  $options (optional)
+     * @param array $body (optional)
+     * @param array $headers (optional)
+     * @param array $options (optional)
      *
-     * @return Dpc\GuzzleClient\GuzzleClient
+     * @return RequestClientContract
      */
-    public function send(string $method, string $uri, array $body = null, array $headers = null, array $options = null)
+    public function send(string $method, string $uri, array $body = null, array $headers = null, array $options = null): RequestClientContract
     {
-        [ $this->method, $this->uri, $this->body, $this->headers, $this->options ] = [$method, $uri, $body, $headers, $options];
+        [$this->method, $this->uri, $this->body, $this->headers, $this->options] = [$method, $uri, $body, $headers, $options];
 
         return $this;
     }
 
     /**
-     * @return Dpc\GuzzleClient\GuzzleClient
+     * @return RequestClientContract
      */
-    public function asFormParams()
+    public function asFormParams(): RequestClientContract
     {
         $this->format = 'form_params';
         return $this;
     }
 
     /**
-     * @return Dpc\GuzzleClient\GuzzleClient
+     * @return RequestClientContract
      */
-    public function asJson(): self
+    public function asJson(): RequestClientContract
     {
         $this->format = 'json';
         return $this;
@@ -70,7 +68,7 @@ class GuzzleClient implements RequestClientContract
     /**
      * @return string
      */
-    public function content()
+    public function content(): string
     {
         return $this->sendRequest();
     }
@@ -85,8 +83,8 @@ class GuzzleClient implements RequestClientContract
      */
     protected function sendRequest(): string
     {
-        return (string) $this->client->request($this->method, $this->uri, [
-            $this->format  => $this->body,
+        return (string)$this->client->request($this->method, $this->uri, [
+            $this->format => $this->body,
             'headers' => $this->headers,
             'options' => $this->options,
         ])->getBody();

@@ -7,12 +7,16 @@ use Illuminate\Support\ServiceProvider;
 
 class GuzzleClientServiceProvider extends ServiceProvider
 {
+    /**
+     * Bootstrap the application services.
+     *
+     * @return void
+     */
     public function boot()
     {
         $this->publishes([
             __DIR__ . '/../config.php' => config_path('guzzle.php'),
         ], 'guzzle-client-config');
-
     }
 
     /**
@@ -28,6 +32,5 @@ class GuzzleClientServiceProvider extends ServiceProvider
                 'base_uri' => config('guzzle.base_uri'),
             ]);
         });
-
     }
 }
