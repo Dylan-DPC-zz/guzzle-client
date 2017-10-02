@@ -33,10 +33,9 @@ class GuzzleClient implements RequestClientContract
     /**
      * @param string $method
      * @param string $uri
-     * @param array $body (optional)
-     * @param array $headers (optional)
-     * @param array $options (optional)
-     *
+     * @param array|null $body
+     * @param array|null $headers
+     * @param array|null $options
      * @return RequestClientContract
      */
     public function send(string $method, string $uri, array $body = null, array $headers = null, array $options = null): RequestClientContract
