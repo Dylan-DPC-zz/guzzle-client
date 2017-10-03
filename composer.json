@@ -6,7 +6,8 @@
     "require": {
         "php": ">=7.1",
         "guzzlehttp/guzzle": "^6.3",
-        "illuminate/support": "5.4.*||5.5.*"
+        "illuminate/support": "5.4.*||5.5.*",
+        "phpunit/phpunit": "^6.3"
     },
     "prefer-stable": true,
     "minimum-stability": "stable",
