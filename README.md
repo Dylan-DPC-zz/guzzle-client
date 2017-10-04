@@ -28,22 +28,25 @@ return [
 # Usage
 Inject the contract into the class where you need the client:
 ```php
-   protected $client;
-   /**
-     * Request constructor.
-     * @param RequestClientContract $client
-     */
-    public function __construct(RequestClientContract $client)
-    {
-        $this->client = $client;
-    }
+/**
+ * @var RequestClientContract
+ */
+protected $client;
+
+/**
+ * @param RequestClientContract $client
+ */
+public function __construct(RequestClientContract $client)
+{
+    $this->client = $client;
+}
 ```
 
 You can then use the client by:
 ```php
-  $client->send('POST', 'foo/bar',[
-              'foo' => 'random data'
-            ])->asJson()->json());
+$this->client->send('POST', 'foo/bar', [
+    'foo' => 'random data',
+])->asJson()->json());
 ```
 
 The `asJson()` method will send the data using `json` key in the Guzzle request. (You can use `asFormParams()` to send the request as form params). 
