@@ -1,10 +1,12 @@
 <?php
 
-namespace PHPUnit\Framework;
+namespace Dpc\Tests\Functional;
 
-class initializeTest extends TestCase
+use Dpc\Tests\TestBase;
+
+class initializeTest extends TestBase
 {
-
+    
     /** @test **/
 	function phpunit_works()
 	{

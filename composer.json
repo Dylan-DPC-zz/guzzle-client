@@ -13,7 +13,8 @@
     "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
-            "Dpc\\GuzzleClient\\": "src"
+            "Dpc\\GuzzleClient\\": "src",
+            "Dpc\\Tests\\": "tests"
         }
     },
     "autoload-dev": {

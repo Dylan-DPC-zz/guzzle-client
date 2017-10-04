@@ -19,4 +19,12 @@
             <directory suffix="Test.php">./tests/Unit</directory>
         </testsuite>
     </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./src/</directory>
+            <exclude>
+                <file>./src/GuzzleClientServiceProvider.php</file>
+            </exclude>
+        </whitelist>
+    </filter>
 </phpunit>
