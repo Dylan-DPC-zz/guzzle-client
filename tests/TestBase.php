@@ -2,7 +2,7 @@
 
 namespace Dpc\Tests;
 
-use PHPUnit\Framework\TestCase;
+use Orchestra\Testbench\TestCase;
 
 class TestBase extends TestCase
 {

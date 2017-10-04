@@ -2,14 +2,15 @@
 
 namespace Dpc\Tests\Functional;
 
+use Dpc\GuzzleClient\GuzzleClient;
 use Dpc\Tests\TestBase;
 
 class initializeTest extends TestBase
 {
-    
     /** @test **/
-	function phpunit_works()
+	function guzzle_initialize()
 	{
-        $this->assertTrue(true);
+        $client = new GuzzleClient();
+        $this->assertInstanceOf(GuzzleClient::class, $client);
 	}
 }
