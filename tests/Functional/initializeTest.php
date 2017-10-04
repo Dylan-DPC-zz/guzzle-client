@@ -1,9 +1,9 @@
 <?php
 
-namespace Dpc\Tests\Functional;
+namespace Dpc\GuzzleClient\Tests\Functional;
 
 use Dpc\GuzzleClient\GuzzleClient;
-use Dpc\Tests\TestBase;
+use Dpc\GuzzleClient\Tests\TestBase;
 
 class initializeTest extends TestBase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Dpc\Tests;
+namespace Dpc\GuzzleClient\Tests;
 
 use Orchestra\Testbench\TestCase;
 
