@@ -1,32 +1,37 @@
 {
-    "name": "dpc/guzzle-client",
-    "description": "Simple Guzzle Client for a Laravel application",
-    "type": "libr",
-    "license": "MIT",
-    "require": {
-        "php": ">=7.1",
-        "guzzlehttp/guzzle": "^6.3",
-        "illuminate/support": "5.4.*||5.5.*",
-        "phpunit/phpunit": "^6.3",
-        "orchestra/testbench": "^3.5"
-    },
-    "prefer-stable": true,
-    "minimum-stability": "stable",
-    "autoload": {
-        "psr-4": {
-            "Dpc\\GuzzleClient\\": "src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Dpc\\GuzzleClient\\Tests\\": "tests"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Dpc\\GuzzleClient\\GuzzleClientServiceProvider"
-            ]
-        }
+  "name": "dpc/guzzle-client",
+  "description": "Simple Guzzle Client for a Laravel application",
+  "type": "libr",
+  "license": "MIT",
+  "require": {
+    "php": ">=7.1",
+    "guzzlehttp/guzzle": "^6.3",
+    "illuminate/support": "5.4.*||5.5.*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^6.0",
+    "laravel/lumen-framework": "5.5.*"
+  },
+  "prefer-stable": true,
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {
+      "Dpc\\GuzzleClient\\": "src"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Dpc\\GuzzleClient\\Tests\\": "tests"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Dpc\\GuzzleClient\\GuzzleClientServiceProvider"
+      ]
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit"
+  }
 }
