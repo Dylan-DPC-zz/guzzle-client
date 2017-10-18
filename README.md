@@ -6,7 +6,7 @@ A Simple Guzzle Client for a Laravel application
 
 # Requirements
 * PHP 7.1 or higher
-* [Laravel 5.4 or 5.5](https://laravel.com/)
+* Laravel [5.4](https://laravel.com/docs/5.4) or [5.5](https://laravel.com/docs/5.5)
 
 
 # Installation
@@ -58,8 +58,8 @@ This package follows [semver](http://semver.org/). Features introduced & any bre
 This package is created as a basic wrapper for Guzzle based on what I needed in a few projects. If you need any other features of Guzzle, you can create a issue  here or send a PR to master branch. 
 
 If you need help or have any questions you can:
-* Create an issue here
-* Send a tweet to @DPC_22
+* [Create an issue here](https://github.com/Dylan-DPC/guzzle-client/issues/new)
+* [Send a tweet to @DPC_22](https://twitter.com/DPC_22)
 * Email me at dylan.dpc@gmail.com
 * DM me on the [larachat](https://larachat.co/) slack team (@Dylan DPC)
 
