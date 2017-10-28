@@ -3,6 +3,7 @@
 namespace Dpc\GuzzleClient;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use Illuminate\Support\ServiceProvider;
 
 class GuzzleClientServiceProvider extends ServiceProvider
@@ -27,7 +28,7 @@ class GuzzleClientServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(RequestClientContract::class, GuzzleClient::class);
-        $this->app->bind(Client::class, function () {
+        $this->app->bind(ClientInterface::class, function () {
             return new Client([
                 'base_uri' => config('guzzle.base_uri'),
             ]);
