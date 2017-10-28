@@ -3,7 +3,6 @@ sudo: false
 dist: trusty
 
 php:
-  - 7.0
   - 7.1
 
 before_script:
