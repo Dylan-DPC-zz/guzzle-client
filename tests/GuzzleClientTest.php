@@ -297,7 +297,7 @@ class GuzzleClientTest extends TestCase
         $this->assertTrue($logFileResource !== false);
         $this->assertTrue(file_exists($logFile));
 
-        $client = $this->guzzleClient->debug($logFileResource)->send('post', $this->url('/post'), [
+        $this->guzzleClient->debug($logFileResource)->send('post', $this->url('/post'), [
             'foo' => 'bar',
             'key' => 'value'
         ])->asJson()->content();
