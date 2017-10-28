@@ -5,6 +5,7 @@ use PHPUnit\Framework\TestCase;
 
 class GuzzleClientTest extends TestCase
 {
+    /** @var GuzzleClient */
     protected $guzzleClient;
 
     public static function setUpBeforeClass()
@@ -285,6 +286,28 @@ class GuzzleClientTest extends TestCase
                 'content-type' => ['application/json'],
             ],
         ], $response);
+    }
+
+    /** @test */
+    function properly_passes_debug_option(){
+        $logFile = './guzzle_client_debug_test.log';
+        $logFileResource = fopen($logFile, 'w+');
+
+        $this->assertTrue($logFileResource !== false);
+        $this->assertTrue(file_exists($logFile));
+
+        $this->guzzleClient->debug($logFileResource)->send('post', $this->url('/post'), [
+            'foo' => 'bar',
+            'key' => 'value'
+        ])->asJson()->content();
+
+        fclose($logFileResource);
+
+        $logFileContent = file_get_contents($logFile);
+
+        $this->assertTrue($logFileContent !== false);
+        $this->assertTrue(strlen($logFileContent) > 0);
+        $this->assertTrue(unlink($logFile));
     }
 }
 

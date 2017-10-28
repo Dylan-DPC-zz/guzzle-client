@@ -22,6 +22,8 @@ class GuzzleClient implements RequestClientContract
 
     protected $format;
 
+    protected $debug;
+
     /**
      * GuzzleClient constructor.
      */
@@ -78,14 +80,29 @@ class GuzzleClient implements RequestClientContract
     }
 
     /**
+     * @param bool|resource $debug
+     * @return $this
+     */
+    public function debug($debug = true) {
+        $this->debug = $debug;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     protected function sendRequest(): string
     {
-        return (string)$this->client->request($this->method, $this->uri, [
+        $response = (string)$this->client->request($this->method, $this->uri, [
             $this->format => $this->body,
             'headers' => $this->headers,
             'options' => $this->options,
+            'debug' => $this->debug
         ])->getBody();
+
+        $this->debug = false;
+
+        return $response;
     }
 }
