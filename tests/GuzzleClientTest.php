@@ -291,7 +291,6 @@ class GuzzleClientTest extends TestCase
     /** @test */
     function properly_passes_debug_option(){
         $logFile = './guzzle_client_debug_test.log';
-
         $logFileResource = fopen($logFile, 'w+');
 
         $this->assertTrue($logFileResource !== false);
