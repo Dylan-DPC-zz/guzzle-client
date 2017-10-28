@@ -51,6 +51,27 @@ $this->client->send('POST', 'foo/bar', [
 
 The `asJson()` method will send the data using `json` key in the Guzzle request. (You can use `asFormParams()` to send the request as form params). 
 
+# Debugging
+
+Using `debug(bool|resource)` before sending a request turns on Guzzle's debugger, more information about that [here](http://docs.guzzlephp.org/en/stable/request-options.html#debug).
+
+The debugger is turned off after every request, if you need to debug multiple requests sent sequentially you will need to turn on debugging for all of them.
+
+**Example**
+
+```php
+$logFile = './guzzle_client_debug_test.log';
+$logFileResource = fopen($logFile, 'w+');
+
+$this->client->debug($logFileResource)->send('POST', 'foo/bar', [
+    'foo' => 'random data',
+])->asJson()->json());
+
+fclose($logFileResource);
+```
+
+This writes Guzzle's debug information to `guzzle_client_debug_test.log`.
+
 # Versioning
 This package follows [semver](http://semver.org/). Features introduced & any breaking changes created in major releases are mentioned in [releases](https://github.com/Dylan-DPC/guzzle-client/releases). 
 
