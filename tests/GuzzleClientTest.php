@@ -14,7 +14,7 @@ class GuzzleClientTest extends TestCase
 
     public function setUp()
     {
-        $this->guzzleClient = new GuzzleClient();
+        $this->guzzleClient = new GuzzleClient(new \GuzzleHttp\Client());
     }
 
     function url($url)
