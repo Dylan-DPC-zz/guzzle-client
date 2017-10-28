@@ -2,7 +2,7 @@
 
 namespace Dpc\GuzzleClient;
 
-use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 
 class GuzzleClient implements RequestClientContract
 {
@@ -25,9 +25,9 @@ class GuzzleClient implements RequestClientContract
     /**
      * GuzzleClient constructor.
      */
-    public function __construct()
+    public function __construct(ClientInterface $client)
     {
-        $this->client = app(Client::class);
+        $this->client = $client;
     }
 
     /**
