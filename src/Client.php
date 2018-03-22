@@ -46,6 +46,8 @@ class Client implements RequestInterface
     public function make(string $base_uri): RequestInterface
     {
         $this->client = new GuzzleClient(['base_uri' => $base_uri]);
+        
+        return $this;
     }
 
     /**
