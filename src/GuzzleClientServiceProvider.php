@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Dpc\GuzzleClient;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\ClientInterface;
 use Illuminate\Support\ServiceProvider;
 
 class GuzzleClientServiceProvider extends ServiceProvider
@@ -16,9 +14,7 @@ class GuzzleClientServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->publishes([
-            __DIR__ . '/../config.php' => config_path('guzzle.php'),
-        ], 'guzzle-client-config');
+        //
     }
 
     /**
@@ -28,11 +24,6 @@ class GuzzleClientServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(RequestClientContract::class, GuzzleClient::class);
-        $this->app->bind(ClientInterface::class, function (): Client {
-            return new Client([
-                'base_uri' => config('guzzle.base_uri'),
-            ]);
-        });
+        $this->app->bind(RequestInterface::class, Client::class);
     }
 }
