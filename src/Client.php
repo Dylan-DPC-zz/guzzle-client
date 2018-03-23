@@ -150,7 +150,7 @@ class Client implements RequestInterface
      */
     public function debug($debug = true): RequestInterface
     {
-        $this->debug = $debug
+        $this->debug = $debug;
 
         return $this;
     }
