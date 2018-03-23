@@ -1,6 +1,6 @@
 <?php
 
-use Dpc\GuzzleClient\Client;
+use Dpc\GuzzleClient\Client as GuzzleClient;
 use PHPUnit\Framework\TestCase;
 
 class GuzzleClientTest extends TestCase
