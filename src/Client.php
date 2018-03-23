@@ -46,7 +46,7 @@ class Client implements RequestInterface
     public function make(string $base_uri): RequestInterface
     {
         $this->client = new GuzzleClient(['base_uri' => $base_uri]);
-        
+
         return $this;
     }
 
@@ -146,6 +146,7 @@ class Client implements RequestInterface
     /**
      * Toggle debugging.
      *
+     * @param bool $debug
      * @return $this
      */
     public function debug($debug = true): RequestInterface
@@ -213,12 +214,17 @@ class Client implements RequestInterface
      */
     private function makeRequest(string $method = 'GET'): ResponseInterface
     {
-        $response = $this->client->request($method, $this->uri, [
+        $requestParameters = [
             $this->format => $this->body,
-            $this->headers => $this->headers,
-            $this->options => $this->options,
+            'headers' => $this->headers,
             'debug' => $this->debug
-        ]);
+        ];
+
+        if ($this->options !== null) {
+            $requestParameters = array_merge($requestParameters, $this->options);
+        }
+
+        $response = $this->client->request($method, $this->uri, $requestParameters);
 
         $this->debug = false;
 
