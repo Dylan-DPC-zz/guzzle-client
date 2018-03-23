@@ -1,328 +1,287 @@
 <?php
 
-use Dpc\GuzzleClient\GuzzleClient;
+use Dpc\GuzzleClient\Client as GuzzleClient;
 use PHPUnit\Framework\TestCase;
 
 class GuzzleClientTest extends TestCase
 {
     /** @var GuzzleClient */
-    protected $guzzleClient;
-
-    public static function setUpBeforeClass()
-    {
-        GuzzleClientServer::start();
-    }
+    protected $client;
 
     public function setUp()
     {
-        $this->guzzleClient = new GuzzleClient(new \GuzzleHttp\Client());
-    }
-
-    function url($url)
-    {
-        return vsprintf('%s/%s', [
-            'http://localhost:'.getenv('TEST_SERVER_PORT'),
-            ltrim($url, '/'),
-        ]);
+        $client = new GuzzleClient();
+        $this->client = $client->make('https://httpbin.org');
     }
 
     /** @test */
     function a_standard_get_is_working()
     {
-        $response = $this->guzzleClient->send('GET', $this->url('/get'), [
+        $response = $this->client->to('anything')->withBody([
             'foo' => 'bar',
-            'baz' => 'qux',
-        ])->asJson()->json();
+            'baz' => 'qux'
+        ])->asJson()->get()->getBody();
 
-        $this->assertEquals([
-            'foo' => 'bar',
-            'baz' => 'qux',
-        ], (array) $response->json);
+        $this->assertArraySubset([
+            'json' => [
+                'foo' => 'bar',
+                'baz' => 'qux'
+            ],
+        ], (array)json_decode($response, true));
     }
 
     /** @test */
     function can_retrieve_the_raw_response_body()
     {
-        $response = $this->guzzleClient->send('GET', $this->url('/simple-response'))->content();
-
-        $this->assertEquals("A simple string response", $response);
+        $response = $this->client->to('robots.txt')->get()->getBody();
+        $this->assertContains('User-agent: *', (string)$response);
     }
 
     /** @test */
     function query_parameters_in_urls_are_respected()
     {
-        $response = $this->guzzleClient->send('GET', $this->url('/get?foo=bar&baz=qux'))->json();
+        $response = $this->client->to('anything?foo=bar&baz=qux')->get()->getBody();
 
-        $this->assertEquals([
-            'foo' => 'bar',
-            'baz' => 'qux',
-        ], (array) $response->query);
+        $this->assertArraySubset([
+            'args' => [
+                'foo' => 'bar',
+                'baz' => 'qux'
+            ]
+        ], (array)json_decode($response, true));
     }
 
     /** @test */
     function query_parameters_in_urls_can_be_sent_together_with_array_parameters()
     {
-        $response = $this->guzzleClient->send('GET', $this->url('/get?foo=bar'), [
-            'baz' => 'qux',
-        ])->asJson()->json();
+        $response = $this->client->to('anything?foo=bar')->withBody([
+            'baz' => 'qux'
+        ])->asJson()->get()->getBody();
 
-        $this->assertEquals([
-            'foo' => 'bar',
-        ], (array) $response->query);
-
-        $this->assertEquals([
-            'baz' => 'qux',
-        ], (array) $response->json);
+        $this->assertArraySubset([
+            'args' => [
+                'foo' => 'bar'
+            ],
+            'json' => [
+                'baz' => 'qux'
+            ]
+        ], (array)json_decode($response, true));
     }
 
     /** @test */
     function post_content_can_be_json()
     {
-        $response = json_decode($this->guzzleClient->send('POST', $this->url('/post'), [
+        $response = $this->client->to('post')->withBody([
             'foo' => 'bar',
-            'baz' => 'qux',
-        ])->asJson()->content(), true);
+            'baz' => 'qux'
+        ])->asJson()->post()->getBody();
 
         $this->assertArraySubset([
-            'headers' => [
-                'content-type' => ['application/json'],
-            ],
             'json' => [
                 'foo' => 'bar',
-                'baz' => 'qux',
+                'baz' => 'qux'
             ],
-        ], $response);
+            'headers' => [
+                'Content-Type' => 'application/json'
+            ]
+        ], (array)json_decode($response, true));
     }
 
     /** @test */
     function post_content_can_be_sent_as_form_params()
     {
-        $response = json_decode($this->guzzleClient->send('POST', $this->url('/post'), [
+        $response = $this->client->to('post')->withBody([
             'foo' => 'bar',
-            'baz' => 'qux',
-        ])->asFormParams()->content(), true);
+            'baz' => 'qux'
+        ])->asFormParams()->post()->getBody();
 
         $this->assertArraySubset([
-            'headers' => [
-                'content-type' => ['application/x-www-form-urlencoded'],
-            ],
-            'form_params' => [
+            'form' => [
                 'foo' => 'bar',
-                'baz' => 'qux',
+                'baz' => 'qux'
             ],
-        ], $response);
-    }
-
-    /** @test */
-    function post_content_can_be_sent_as_json_explicitly()
-    {
-        $response = json_decode($this->guzzleClient->send('POST', $this->url('/post'), [
-            'foo' => 'bar',
-            'baz' => 'qux',
-        ])->asJson()->content(), true);
-
-        $this->assertArraySubset([
             'headers' => [
-                'content-type' => ['application/json'],
-            ],
-            'json' => [
-                'foo' => 'bar',
-                'baz' => 'qux',
-            ],
-        ], $response);
+                'Content-Type' => 'application/x-www-form-urlencoded'
+            ]
+        ], (array)json_decode($response, true));
     }
 
     /** @test */
     function get_with_additional_headers()
     {
-        $response = json_decode($this->guzzleClient->send('GET', $this->url('/get'), [], ['Custom' => 'Header'])->asJson()->content(), true);
+        $response = $this->client->to('get')->withHeaders([
+            'Custom' => 'Header'
+        ])->asJson()->get()->getBody();
 
         $this->assertArraySubset([
-            'custom' => ['Header'],
-        ], $response['headers']);
+            'headers' => [
+                'Custom' => 'Header'
+            ]
+        ], (array)json_decode($response, true));
     }
 
     /** @test */
     function post_with_additional_headers()
     {
-        $response = json_decode($this->guzzleClient->send('POST', $this->url('/post'), [], ['Custom' => 'Header'])->asJson()->content(), true);
+        $response = $this->client->to('post')->withHeaders([
+            'Custom' => 'Header'
+        ])->asJson()->post()->getBody();
 
         $this->assertArraySubset([
-            'custom' => ['Header'],
-        ], $response['headers']);
+            'headers' => [
+                'Custom' => 'Header'
+            ]
+        ], (array)json_decode($response, true));
     }
 
     /** @test */
     function patch_requests_are_supported()
     {
-        $response = json_decode($this->guzzleClient->send('PATCH', $this->url('/patch'), [
+        $response = $this->client->to('patch')->withBody([
             'foo' => 'bar',
-            'baz' => 'qux',
-        ])->asJson()->content(), true);
+            'baz' => 'qux'
+        ])->asJson()->patch()->getBody();
 
         $this->assertArraySubset([
             'json' => [
                 'foo' => 'bar',
-                'baz' => 'qux',
-            ],
-        ], $response);
+                'baz' => 'qux'
+            ]
+        ], (array)json_decode($response, true));
     }
 
     /** @test */
     function put_requests_are_supported()
     {
-        $response = json_decode($this->guzzleClient->send('PUT', $this->url('/put'), [
+        $response = $this->client->to('put')->withBody([
             'foo' => 'bar',
-            'baz' => 'qux',
-        ])->asJson()->content(), true);
+            'baz' => 'qux'
+        ])->asJson()->put()->getBody();
 
         $this->assertArraySubset([
             'json' => [
                 'foo' => 'bar',
-                'baz' => 'qux',
-            ],
-        ], $response);
+                'baz' => 'qux'
+            ]
+        ], (array)json_decode($response, true));
     }
 
     /** @test */
     function delete_requests_are_supported()
     {
-        $response = json_decode($this->guzzleClient->send('DELETE', $this->url('/delete'), [
-            'foo' => 'bar',
-            'baz' => 'qux',
-        ])->asJson()->content(), true);
+        $response = $this->client->to('delete?id=1')->asJson()->delete()->getBody();
 
         $this->assertArraySubset([
-            'json' => [
-                'foo' => 'bar',
-                'baz' => 'qux',
-            ],
-        ], $response);
+            'args' => [
+                'id' => 1
+            ]
+        ], (array)json_decode($response, true));
     }
 
     /** @test */
     function query_parameters_are_respected_in_post_requests()
     {
-        $response = json_decode($this->guzzleClient->send('POST', $this->url('/post?banana=sandwich'), [
-            'foo' => 'bar',
-            'baz' => 'qux',
-        ])->asJson()->content(), true);
+        $response = $this->client->to('post?foo=bar')->withBody([
+            'lorem' => 'ipsum',
+            'bacon' => 'sandwich'
+        ])->asJson()->post()->getbody();
 
         $this->assertArraySubset([
-            'query' => [
-                'banana' => 'sandwich',
+            'args' => [
+                'foo' => 'bar'
             ],
             'json' => [
-                'foo' => 'bar',
-                'baz' => 'qux',
-            ],
-        ], $response);
-    }
-
-    /** @test */
-    function query_parameters_are_respected_in_put_requests()
-    {
-        $response = json_decode($this->guzzleClient->send('PUT', $this->url('/put?banana=sandwich'), [
-            'foo' => 'bar',
-            'baz' => 'qux',
-        ])->asJson()->content(), true);
-
-        $this->assertArraySubset([
-            'query' => [
-                'banana' => 'sandwich',
-            ],
-            'json' => [
-                'foo' => 'bar',
-                'baz' => 'qux',
-            ],
-        ], $response);
+                'lorem' => 'ipsum',
+                'bacon' => 'sandwich'
+            ]
+        ], (array)json_decode($response, true));
     }
 
     /** @test */
     function query_parameters_are_respected_in_patch_requests()
     {
-        $response = json_decode($this->guzzleClient->send('PATCH', $this->url('/patch?banana=sandwich'), [
-            'foo' => 'bar',
-            'baz' => 'qux',
-        ])->asJson()->content(), true);
+        $response = $this->client->to('patch?foo=bar')->withBody([
+            'lorem' => 'ipsum',
+            'bacon' => 'sandwich'
+        ])->asJson()->patch()->getbody();
 
         $this->assertArraySubset([
-            'query' => [
-                'banana' => 'sandwich',
+            'args' => [
+                'foo' => 'bar'
             ],
             'json' => [
-                'foo' => 'bar',
-                'baz' => 'qux',
+                'lorem' => 'ipsum',
+                'bacon' => 'sandwich'
+            ]
+        ], (array)json_decode($response, true));
+    }
+
+    /** @test */
+    function query_parameters_are_respected_in_put_requests()
+    {
+        $response = $this->client->to('put?foo=bar')->withBody([
+            'lorem' => 'ipsum',
+            'bacon' => 'sandwich'
+        ])->asJson()->put()->getbody();
+
+        $this->assertArraySubset([
+            'args' => [
+                'foo' => 'bar'
             ],
-        ], $response);
+            'json' => [
+                'lorem' => 'ipsum',
+                'bacon' => 'sandwich'
+            ]
+        ], (array)json_decode($response, true));
     }
 
     /** @test */
     function query_parameters_are_respected_in_delete_requests()
     {
-        $response = json_decode($this->guzzleClient->send('DELETE', $this->url('/delete?banana=sandwich'), [
-            'foo' => 'bar',
-            'baz' => 'qux',
-        ])->asJson()->content(), true);
+        $response = $this->client->to('delete?foo=bar')->withBody([
+            'lorem' => 'ipsum',
+            'bacon' => 'sandwich'
+        ])->asJson()->delete()->getbody();
 
         $this->assertArraySubset([
-            'query' => [
-                'banana' => 'sandwich',
+            'args' => [
+                'foo' => 'bar'
             ],
             'json' => [
-                'foo' => 'bar',
-                'baz' => 'qux',
-            ],
-        ], $response);
+                'lorem' => 'ipsum',
+                'bacon' => 'sandwich'
+            ]
+        ], (array)json_decode($response, true));
     }
 
     /** @test */
-    function can_retrieve_response_header_values()
+    function properly_obeys_specified_options()
     {
-        $response = json_decode($this->guzzleClient->send('GET', $this->url('/get'), [])->asJson()->content(), true);
+        $response = $this->client->to('redirect/5')->withOptions([
+            'allow_redirects' => false
+        ])->asJson()->get();
 
-        $this->assertArraySubset([
-            'headers' => [
-                'content-type' => ['application/json'],
-            ],
-        ], $response);
+        $this->assertEquals(302, $response->getStatusCode());
     }
 
     /** @test */
-    function properly_passes_debug_option(){
+    function properly_passes_debug_option()
+    {
         $logFile = './guzzle_client_debug_test.log';
         $logFileResource = fopen($logFile, 'w+');
 
         $this->assertTrue($logFileResource !== false);
         $this->assertTrue(file_exists($logFile));
 
-        $this->guzzleClient->debug($logFileResource)->send('post', $this->url('/post'), [
+        $this->client->debug($logFileResource)->to('post')->withBody([
             'foo' => 'bar',
             'key' => 'value'
-        ])->asJson()->content();
+        ])->asJson()->post()->getBody();
 
         fclose($logFileResource);
-
         $logFileContent = file_get_contents($logFile);
 
         $this->assertTrue($logFileContent !== false);
         $this->assertTrue(strlen($logFileContent) > 0);
         $this->assertTrue(unlink($logFile));
-    }
-}
-
-class GuzzleClientServer
-{
-    static function start()
-    {
-        $pid = exec('php -S '.'localhost:'.getenv('TEST_SERVER_PORT').' -t ./tests/server/public > /dev/null 2>&1 & echo $!');
-
-        while (@file_get_contents('http://localhost:'.getenv('TEST_SERVER_PORT').'/get') === false) {
-            usleep(1000);
-        }
-
-        register_shutdown_function(function () use ($pid) {
-            exec('kill '.$pid);
-        });
     }
 }
