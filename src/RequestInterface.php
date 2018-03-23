@@ -55,9 +55,10 @@ interface RequestInterface
     public function asJson(): RequestInterface;
 
     /**
+     * @param bool $debug
      * @return RequestInterface
      */
-    public function debug(): RequestInterface;
+    public function debug($debug = true): RequestInterface;
 
     /**
      * @return ResponseInterface

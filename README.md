@@ -8,21 +8,10 @@ A Simple Guzzle Client for a Laravel application
 * PHP 7.1 or higher
 * Laravel [5.4](https://laravel.com/docs/5.4) or [5.5](https://laravel.com/docs/5.5)
 
-
 # Installation
 Via composer
 ```bash
 $ composer require dpc/guzzle-client
-```
-After installation, publish the vendor files by running:
-```bash
-php artisan vendor:publish --provider="Dpc\GuzzleClient\GuzzleClientServiceProvider"
-```
-This will create a `guzzle.php` in the `config` directory which will contain:
-```php
-return [
-    'base_uri' => '',
-];
 ```
 
 # Usage
@@ -42,14 +31,85 @@ public function __construct(RequestClientContract $client)
 }
 ```
 
-You can then use the client by:
+You can then use the client by first calling make, to set the base URI - and then populating the request.
+The client returns a normal PSR ResponseInterface. This means you interact with the response as you would with any Guzzle response.
 ```php
-$this->client->send('POST', 'foo/bar', [
-    'foo' => 'random data',
-])->asJson()->json());
+$client = $this->client->make('https://httpbin.org/');
+
+$client->to('get')->withBody([
+	'foo' => 'bar'
+])->withHeaders([
+	'baz' => 'qux'
+])->withOptions([
+	'allow_redirects' => false
+])->asJson()->get();
+
+echo $response->getBody();
+echo $response->getStatusCode();
 ```
 
-The `asJson()` method will send the data using `json` key in the Guzzle request. (You can use `asFormParams()` to send the request as form params). 
+Alternatively, you can include both the body, headers and options in a single call.
+
+```php
+$client = $this->client->make('https://httpbin.org/');
+
+$response = $client->to('get')->with([
+    'foo' => 'bar'
+], [
+    'baz' => 'qux'
+], [
+    'allow_redirects' => false
+])->asFormParams()->get();
+
+echo $response->getBody();
+echo $response->getStatusCode();
+```
+
+The `asJson()` method will send the data using `json` key in the Guzzle request. (You can use `asFormParams()` to send the request as form params).
+
+# Available methods / Example Usage
+```php
+$client = $this->client->make('https://httpbin.org/');
+
+// GET
+$response = $client->to('brotli')->get();
+
+// POST
+$response = $client->to('post')->withBody([
+	'foo' => 'bar'
+])->asJson()->post();
+
+// PUT
+$response = $client->to('put')->withBody([
+	'foo' => 'bar'
+])->asJson()->put();
+
+// PATCH
+$response = $client->to('patch')->withBody([
+	'foo' => 'bar'
+])->asJson()->patch();
+
+// DELETE
+$response = $client->to('delete?id=1')->delete();
+
+
+// CUSTOM HEADER
+$response = $client->to('get')->withHeaders([
+	'Authorization' => 'Bearer fooBar'
+])->asJson()->get();
+
+
+// CUSTOM OPTIONS
+$response = $client->to('redirect/5')->withOptions([
+	'allow_redirects' => [
+		'max' => 5,
+		'protocols' => [
+			'http',
+			'https'
+		]
+	]
+])->get();
+```
 
 # Debugging
 
@@ -63,9 +123,9 @@ The debugger is turned off after every request, if you need to debug multiple re
 $logFile = './guzzle_client_debug_test.log';
 $logFileResource = fopen($logFile, 'w+');
 
-$this->client->debug($logFileResource)->send('POST', 'foo/bar', [
-    'foo' => 'random data',
-])->asJson()->json());
+$client->debug($logFileResource)->to('post')->withBody([
+	'foo' => 'random data'
+])->asJson()->post();
 
 fclose($logFileResource);
 ```
@@ -76,7 +136,7 @@ This writes Guzzle's debug information to `guzzle_client_debug_test.log`.
 This package follows [semver](http://semver.org/). Features introduced & any breaking changes created in major releases are mentioned in [releases](https://github.com/Dylan-DPC/guzzle-client/releases). 
 
 # Support
-This package is created as a basic wrapper for Guzzle based on what I needed in a few projects. If you need any other features of Guzzle, you can create a issue  here or send a PR to master branch. 
+This package is created as a basic wrapper for Guzzle based on what I needed in a few projects. If you need any other features of Guzzle, you can create a issue here or send a PR to master branch. 
 
 If you need help or have any questions you can:
 * [Create an issue here](https://github.com/Dylan-DPC/guzzle-client/issues/new)
