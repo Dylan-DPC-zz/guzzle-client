@@ -205,6 +205,20 @@ class Client implements RequestInterface
     {
         return $this->makeRequest('DELETE');
     }
+    
+    /**
+     * @param string $method
+     * @return ResponseInterface
+     * @throws \InvalidArgumentException
+     */
+    public function request(string $method): ResponseInterface
+    {
+        if (!in_array(strtolower($method), ['get', 'post', 'put', 'patch', 'delete'])) {
+            throw new \InvalidArgumentException('The specified method must be either GET, POST, PUT, PATCH or DELETE');
+        }
+
+        return $this->makeRequest($method);
+    }
 
     /**
      * Sends the request.
