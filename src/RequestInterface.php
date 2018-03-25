@@ -84,4 +84,11 @@ interface RequestInterface
      * @return ResponseInterface
      */
     public function delete(): ResponseInterface;
+    
+    /**
+     * @param string $method
+     * @return ResponseInterface
+     * @throws \InvalidArgumentException
+     */
+    public function request(string $method): ResponseInterface;
 }
