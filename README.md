@@ -71,35 +71,35 @@ The `asJson()` method will send the data using `json` key in the Guzzle request.
 ```php
 $client = $this->client->make('https://httpbin.org/');
 
-// GET
+// Get request
 $response = $client->to('brotli')->get();
 
-// POST
+// Post request
 $response = $client->to('post')->withBody([
 	'foo' => 'bar'
 ])->asJson()->post();
 
-// PUT
+// Put request
 $response = $client->to('put')->withBody([
 	'foo' => 'bar'
 ])->asJson()->put();
 
-// PATCH
+// Patch request
 $response = $client->to('patch')->withBody([
 	'foo' => 'bar'
 ])->asJson()->patch();
 
-// DELETE
+// Delete request
 $response = $client->to('delete?id=1')->delete();
 
 
-// CUSTOM HEADER
+// Headers are easily added using the withHeaders method
 $response = $client->to('get')->withHeaders([
 	'Authorization' => 'Bearer fooBar'
 ])->asJson()->get();
 
 
-// CUSTOM OPTIONS
+// Custom options can be specified for the Guzzle instance
 $response = $client->to('redirect/5')->withOptions([
 	'allow_redirects' => [
 		'max' => 5,
@@ -109,6 +109,11 @@ $response = $client->to('redirect/5')->withOptions([
 		]
 	]
 ])->get();
+
+// You can also specify the request method as a string
+$response = $client->to('post')->withBody([
+	'foo' => 'bar'
+])->asJson()->request('post');
 ```
 
 # Debugging
